@@ -1,0 +1,29 @@
+name: Build ve Test
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Kodu al
+        uses: actions/checkout@v4
+
+      - name: .NET kur
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Bağımlılıkları yükle
+        run: dotnet restore Temp.sln
+
+      - name: Derle
+        run: dotnet build Temp.sln --configuration Release --no-restore
+
+      - name: Test et
+        run: dotnet test Temp.sln --configuration Release --no-build --verbosity normal
